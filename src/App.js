@@ -7,13 +7,13 @@ import VerifyOTP from "./Components/VerifyOTP";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useReducer } from "react";
 import { reducer } from "./Reducer/reducer";
+import { Products } from "./Components/Products";
 export const ContextAPI = React.createContext();
 
 const initialState = {
   emailid: "",
   userid: "",
 };
-import { Products } from "./Components/Products";
 
 
 function App() {

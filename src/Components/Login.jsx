@@ -2,7 +2,7 @@ import axios from "axios";
 import { useFormik } from "formik";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { config } from "../config";
+// import { config } from "../config";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -40,13 +40,13 @@ function Login() {
           `${process.env.REACT_APP_API_URL}/api/users/login`,
           values
         );
-        alert(res.data.message);
-        console.log(res.data.user);
+        // alert(res.data.message);
+        // console.log(res.data.user);
 
-        localStorage.setItem("email", values.email);
-        localStorage.setItem("react_app_token", res.data.token);
-        localStorage.setItem("userid", res.data.user._id);
-        navigate(`/dashboard/${localStorage.getItem("userid")}`);
+        // localStorage.setItem("email", values.email);
+        // localStorage.setItem("react_app_token", res.data.token);
+        // localStorage.setItem("userid", res.data.user._id);
+        navigate(`/products`);
 
         // localStorage.setItem("react_app_token",res.data.token)
       } catch (error) {
