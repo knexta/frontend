@@ -2,9 +2,19 @@ import axios from "axios";
 import { useFormik } from "formik";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { config } from "../config";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+console.log(process.env);
+
 
 function Login() {
+
+  const API = process.env.REACT_APP_API_URL
+
   let navigate = useNavigate();
+  
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -21,6 +31,10 @@ function Login() {
       return errors;
     },
     onSubmit: async (values) => {
+      console.log(values)
+      // const API = env.API_URL;
+      // console.log(API)
+      
       try {
         const res = await axios.put(
           `${process.env.REACT_APP_API_URL}/api/users/login`,
@@ -36,13 +50,18 @@ function Login() {
 
         // localStorage.setItem("react_app_token",res.data.token)
       } catch (error) {
-        console.log(error);
+        // const message = error;
+        // console.log(message)
+        // console.log(error.response.data.message);
+        toast(error.response.data.message);
+        
       }
     },
   });
 
   return (
     <div>
+      <ToastContainer />
       <h2 className="text-center mt-5">Authentication</h2>
       <div className="container">
         <div className="row m-5 no-gutters shadow-lg">
@@ -50,7 +69,7 @@ function Login() {
             <img
               src="https://securityintelligence.com/wp-content/uploads/2018/10/si-advanced-authentication-feature.jpg"
               className="img-fluid"
-              alt="image"
+              alt="system-lock"
               style={{ minHeight: "100%" }}
             />
           </div>

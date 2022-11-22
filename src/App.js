@@ -13,6 +13,8 @@ const initialState = {
   emailid: "",
   userid: "",
 };
+import { Products } from "./Components/Products";
+
 
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -25,7 +27,8 @@ function App() {
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/verifyotp/:userid" element={<VerifyOTP />} />
-          </Routes>
+            <Route path="/products" element={<Products />} />
+        </Routes>
         </ContextAPI.Provider>
       </BrowserRouter>
     </>
