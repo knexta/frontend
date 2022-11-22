@@ -2,7 +2,6 @@ import axios from "axios";
 import { useFormik } from "formik";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { config } from "../config";
 
 function Login() {
   let navigate = useNavigate();
@@ -23,7 +22,10 @@ function Login() {
     },
     onSubmit: async (values) => {
       try {
-        const res = await axios.put(`${config.api}/api/users/login`, values);
+        const res = await axios.put(
+          `${process.env.REACT_APP_API_URL}/api/users/login`,
+          values
+        );
         alert(res.data.message);
         console.log(res.data.user);
 

@@ -1,21 +1,25 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { config } from "../config";
+import React, { useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { ContextAPI } from "../App";
+import { notify } from "./Toast/toast";
 
 function VerifyOTP() {
+  let context = useContext(ContextAPI);
+
   let navigate = useNavigate();
   let handleResend = async () => {
     try {
       let res = await axios.post(
-        `${config.api}/api/users/resendOtp`,
+        `${process.env.REACT_APP_API_URL}/api/users/resendOtp`,
         formik.values
       );
       console.log(res);
-      alert(res.data.message);
+      notify(res.data.message);
     } catch (error) {
-      console.log(error);
+      notify(error.response.data.message);
     }
   };
   let params = useParams();
@@ -23,7 +27,7 @@ function VerifyOTP() {
     initialValues: {
       otp: "",
       userId: params.userid,
-      email: localStorage.getItem("email"),
+      email: context.State.emailid,
     },
     validate: (values) => {
       let errors = {};
@@ -36,7 +40,7 @@ function VerifyOTP() {
       // console.log(values)
       try {
         const res = await axios.post(
-          `${config.api}/api/users/verifyOtp`,
+          `${process.env.REACT_APP_API_URL}/api/users/verifyOtp`,
           values
         );
         navigate("/");
@@ -50,6 +54,7 @@ function VerifyOTP() {
 
   return (
     <>
+      <ToastContainer />
       <h2 className="text-center mt-5">Authentication</h2>
       <div className="container">
         <div className="row m-5 no-gutters shadow-lg">

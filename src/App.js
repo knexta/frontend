@@ -4,16 +4,29 @@ import Login from "./Components/Login";
 import Register from "./Components/Register";
 import "bootstrap/dist/css/bootstrap.min.css";
 import VerifyOTP from "./Components/VerifyOTP";
+import "react-toastify/dist/ReactToastify.css";
+import React, { useReducer } from "react";
+import { reducer } from "./Reducer/reducer";
+export const ContextAPI = React.createContext();
+
+const initialState = {
+  emailid: "",
+  userid: "",
+};
 
 function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/verifyotp/:userid" element={<VerifyOTP />} />
-        </Routes>
+        <ContextAPI.Provider value={{ State: state, Dispatch: dispatch }}>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/verifyotp/:userid" element={<VerifyOTP />} />
+          </Routes>
+        </ContextAPI.Provider>
       </BrowserRouter>
     </>
   );
