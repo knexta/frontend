@@ -1,42 +1,79 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import React, { useContext, useReducer } from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ContextAPI } from "../App";
 import { notify } from "./Toast/toast";
 
+interface error {
+  password?: string;
+  email?: string;
+}
+interface state {
+  emailid: string;
+  userid: string;
+}
+
+interface dispatchParam {
+  type: string;
+  payload: string;
+}
+
+type dispatch = (data: dispatchParam) => void;
+
+interface context {
+  Dispatch?: dispatch;
+  State?: state;
+}
+
 function Register() {
   let navigate = useNavigate();
-  let context = useContext(ContextAPI);
+  let context: context = useContext(ContextAPI);
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
     validate: (values) => {
-      let errors = {};
+      let errors: error = {};
       if (!values.email) {
         errors.email = "Please enter email";
       }
       if (!values.password) {
         errors.password = "Please enter password";
       }
+      if (!values.confirmPassword) {
+        errors.password = "Please enter confirm password";
+      }
       return errors;
     },
     onSubmit: async (values) => {
-      try {
-        const res = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/users/signup`,
-          values
-        );
-        context.Dispatch({ type: "addEmailid", payload: res.data.data.email });
-        context.Dispatch({ type: "addUserid", payload: res.data.data.userId });
-        // console.log(state);
-        notify(res.data.message);
-        navigate(`/verifyotp/${context.State.userid}`);
-      } catch (error) {
-        notify(error.response.data.message);
+      if (values.password === values.confirmPassword) {
+        try {
+          const res = await axios.post(
+            `${process.env.REACT_APP_API_URL}/api/users/signup`,
+            values
+          );
+          if (context.Dispatch) {
+            context.Dispatch({
+              type: "addEmailid",
+              payload: res.data.data.email,
+            });
+            context.Dispatch({
+              type: "addUserid",
+              payload: res.data.data.userId,
+            });
+          }
+          // console.log(state);
+          notify(res.data.message);
+          if (context.State) {
+            navigate(`/verifyotp/${context.State.userid}`);
+          }
+        } catch (error: any) {
+          notify(error.response.data.message);
+        }
       }
     },
   });
@@ -78,9 +115,18 @@ function Register() {
                       type="password"
                       placeholder="Password"
                       className="form-control"
-                      id="exampleInputPassword1"
                       name="password"
                       value={formik.values.password}
+                      onChange={formik.handleChange}
+                    />
+                  </div>
+                  <div className="form-group pb-3">
+                    <input
+                      type="password"
+                      placeholder="Confirm Password"
+                      className="form-control"
+                      name="confirmPassword"
+                      value={formik.values.confirmPassword}
                       onChange={formik.handleChange}
                     />
                   </div>

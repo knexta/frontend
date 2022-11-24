@@ -1,38 +1,34 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import React, { useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { ContextAPI } from "../App";
-import { notify } from "./Toast/toast";
 
-function VerifyOTP() {
-  let context = useContext(ContextAPI);
-
+function ResetPassword() {
   let navigate = useNavigate();
-  let handleResend = async () => {
-    try {
-      let res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/users/resendOtp`,
-        formik.values
-      );
-      console.log(res);
-      notify(res.data.message);
-    } catch (error) {
-      notify(error.response.data.message);
-    }
-  };
-  let params = useParams();
+
+  interface error {
+    email?: string;
+    password?: string;
+    token?: string;
+  }
+
   let formik = useFormik({
     initialValues: {
-      otp: "",
-      userId: params.userid,
-      email: context.State.emailid,
+      email: "",
+      password: "",
+      token: "",
     },
     validate: (values) => {
-      let errors = {};
-      if (!values.otp) {
-        errors.otp = "Please enter otp";
+      let errors: error = {};
+      if (!values.email) {
+        errors.email = "PLease enter emailid";
+      }
+      if (!values.password) {
+        errors.password = "PLease enter password";
+      }
+      if (!values.token) {
+        errors.token = "PLease enter token";
       }
       return errors;
     },
@@ -51,7 +47,6 @@ function VerifyOTP() {
       }
     },
   });
-
   return (
     <>
       <ToastContainer />
@@ -59,25 +54,30 @@ function VerifyOTP() {
       <div className="container">
         <div className="row m-5 no-gutters shadow-lg">
           <div className="col-md-6 bg-white p-5 ">
-            <h3 className="pb-3">Verify OTP</h3>
+            <h3 className="pb-3">FORGET PASSWORD</h3>
             <div className="form-style">
               <form onSubmit={formik.handleSubmit}>
                 <div className="form-group pb-3">
                   <input
                     type="text"
-                    name="userid"
+                    name="email"
+                    placeholder="Enter Email ID"
                     className="form-control"
-                    value={params.userid}
-                    disabled
+                    value={formik.values.email}
                   />
                   <input
                     type="text"
-                    placeholder="Enter OTP"
+                    name="password"
+                    placeholder="Enter Password"
                     className="form-control"
-                    id="otp"
-                    name="otp"
-                    value={formik.values.otp}
-                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                  />
+                  <input
+                    type="text"
+                    name="emailid"
+                    placeholder="Enter Token"
+                    className="form-control"
+                    value={formik.values.token}
                   />
                 </div>
 
@@ -86,14 +86,7 @@ function VerifyOTP() {
                     type="submit"
                     className="btn btn-dark w-100 font-weight-bold mt-2"
                   >
-                    Verify OTP
-                  </button>
-                  <button
-                    className="btn btn-secondary w-100 font-weight-bold mt-2"
-                    type="button"
-                    onClick={() => handleResend()}
-                  >
-                    Resend OTP
+                    Submit
                   </button>
                 </div>
               </form>
@@ -105,4 +98,4 @@ function VerifyOTP() {
   );
 }
 
-export default VerifyOTP;
+export default ResetPassword;

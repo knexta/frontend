@@ -3,25 +3,26 @@ import { useFormik } from "formik";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { config } from "../config";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-console.log(process.env);
-
+interface error {
+  password?: string;
+  email?: string;
+}
 
 function Login() {
-
-  const API = process.env.REACT_APP_API_URL
+  const API = process.env.REACT_APP_API_URL;
 
   let navigate = useNavigate();
-  
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validate: (values) => {
-      let errors = {};
+      let errors: error = {};
       if (!values.email) {
         errors.email = "Please enter email";
       }
@@ -31,10 +32,10 @@ function Login() {
       return errors;
     },
     onSubmit: async (values) => {
-      console.log(values)
+      console.log(values);
       // const API = env.API_URL;
       // console.log(API)
-      
+
       try {
         const res = await axios.put(
           `${process.env.REACT_APP_API_URL}/api/users/login`,
@@ -49,12 +50,11 @@ function Login() {
         navigate(`/products`);
 
         // localStorage.setItem("react_app_token",res.data.token)
-      } catch (error) {
+      } catch (error: any) {
         // const message = error;
         // console.log(message)
         // console.log(error.response.data.message);
         toast(error.response.data.message);
-        
       }
     },
   });
@@ -111,6 +111,10 @@ function Login() {
                 </div>
               </form>
 
+              <div className="pt-4 text-center">
+                Forget Password
+                <Link to={"/forget-password"}>Forget Password?</Link>
+              </div>
               <div className="pt-4 text-center">
                 Get Members Benefit.<Link to={"/register"}>SignUP</Link>
               </div>
