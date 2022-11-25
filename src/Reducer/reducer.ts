@@ -9,6 +9,7 @@ interface action {
 
 export const reducer = (state: state, action: action) => {
   console.log(action);
+  console.log("in action")
   switch (action.type) {
     case "addEmailid":
       console.log(state);

@@ -3,16 +3,15 @@ import { useFormik } from "formik";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import { config } from "../config";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { notify } from './Toast/toast'
 interface error {
   password?: string;
   email?: string;
 }
 
 function Login() {
-  const API = process.env.REACT_APP_API_URL;
 
   let navigate = useNavigate();
 
@@ -32,29 +31,16 @@ function Login() {
       return errors;
     },
     onSubmit: async (values) => {
-      console.log(values);
-      // const API = env.API_URL;
-      // console.log(API)
 
       try {
         const res = await axios.put(
           `${process.env.REACT_APP_API_URL}/api/users/login`,
           values
         );
-        // alert(res.data.message);
-        // console.log(res.data.user);
-
-        // localStorage.setItem("email", values.email);
-        // localStorage.setItem("react_app_token", res.data.token);
-        // localStorage.setItem("userid", res.data.user._id);
+        notify(res.data.data.message)
         navigate(`/products`);
-
-        // localStorage.setItem("react_app_token",res.data.token)
       } catch (error: any) {
-        // const message = error;
-        // console.log(message)
-        // console.log(error.response.data.message);
-        toast(error.response.data.message);
+        notify(error.response.data.message);
       }
     },
   });

@@ -10,26 +10,10 @@ interface error {
   password?: string;
   email?: string;
 }
-interface state {
-  emailid: string;
-  userid: string;
-}
-
-interface dispatchParam {
-  type: string;
-  payload: string;
-}
-
-type dispatch = (data: dispatchParam) => void;
-
-interface context {
-  Dispatch?: dispatch;
-  State?: state;
-}
 
 function Register() {
   let navigate = useNavigate();
-  let context: context = useContext(ContextAPI);
+  let context = useContext(ContextAPI);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -56,7 +40,9 @@ function Register() {
             `${process.env.REACT_APP_API_URL}/api/users/signup`,
             values
           );
-          if (context.Dispatch) {
+          notify(res.data.message);
+          if (context?.Dispatch) {
+            console.log("dispatching")
             context.Dispatch({
               type: "addEmailid",
               payload: res.data.data.email,
@@ -66,14 +52,24 @@ function Register() {
               payload: res.data.data.userId,
             });
           }
-          // console.log(state);
-          notify(res.data.message);
-          if (context.State) {
-            navigate(`/verifyotp/${context.State.userid}`);
-          }
+          let userID = context?.State ? context.State.userid : ""
+          console.log(userID)
+          navigate(`/verifyotp/${userID}`);
+
         } catch (error: any) {
+          console.log(error)
+          if (error.response.data.message) {
+            notify(error.response.data.message)
+          }
+          error.response.data.errors.map((item: string) => {
+            return (
+              notify(item)
+            )
+          })
           notify(error.response.data.message);
         }
+      } else {
+        notify("Pasword and confirm Password is not same")
       }
     },
   });
@@ -90,7 +86,7 @@ function Register() {
               <img
                 src="https://securityintelligence.com/wp-content/uploads/2018/10/si-advanced-authentication-feature.jpg"
                 className="img-fluid"
-                alt="image"
+                alt="authentication"
                 style={{ minHeight: "100%" }}
               />
             </div>

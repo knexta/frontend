@@ -10,22 +10,27 @@ import { Products } from "./Components/Products";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ForgetPassword from "./Components/ForgetPassword";
 import ResetPassword from "./Components/ResetPassword";
-export const ContextAPI: React.Context<value> = React.createContext({});
-interface actionParams {
-  type: String;
-  dispatch: String;
-}
-interface dispatchParam {
-  action: actionParams;
-}
+
 interface stateParams {
   emailid: String;
   userid: String;
 }
+interface actionParams {
+  type: String;
+  dispatch: String;
+}
+
+interface dispatchParam {
+  action: actionParams;
+}
+
 interface value {
   Dispatch?: dispatchParam | any;
   State?: stateParams | any;
 }
+
+export const ContextAPI = React.createContext<value | null>(null);
+
 
 const initialState = {
   emailid: "",

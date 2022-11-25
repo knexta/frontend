@@ -12,24 +12,8 @@ interface error {
   email?: string;
 }
 
-interface state {
-  emailid: string;
-  userid: string;
-}
-
-interface dispatchParam {
-  type: string;
-  payload: string;
-}
-
-type dispatch = (data: dispatchParam) => void;
-interface context {
-  Dispatch?: dispatch;
-  State?: state;
-}
-
 function VerifyOTP() {
-  let context: context = useContext(ContextAPI);
+  let context = useContext(ContextAPI);
   let navigate = useNavigate();
   let handleResend = async () => {
     try {
@@ -49,7 +33,7 @@ function VerifyOTP() {
     initialValues: {
       otp: "",
       userId: params.userid,
-      email: context.State?.emailid ? context.State.emailid : null,
+      email: context?.State?.emailid ? context.State.emailid : null,
     },
     validate: (values) => {
       let errors: error = {};
