@@ -3,15 +3,12 @@ import { useFormik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { error } from '../Types/types'
 
 function ResetPassword() {
   let navigate = useNavigate();
 
-  interface error {
-    email?: string;
-    password?: string;
-    token?: string;
-  }
+
 
   let formik = useFormik({
     initialValues: {

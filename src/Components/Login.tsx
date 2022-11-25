@@ -2,14 +2,12 @@ import axios from "axios";
 import { useFormik } from "formik";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import { config } from "../config";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { notify } from './Toast/toast'
-interface error {
-  password?: string;
-  email?: string;
-}
+import { error } from '../Types/types'
+
+
 
 function Login() {
 

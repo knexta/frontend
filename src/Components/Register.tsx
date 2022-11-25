@@ -5,11 +5,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ContextAPI } from "../App";
 import { notify } from "./Toast/toast";
+import { error } from '../Types/types'
 
-interface error {
-  password?: string;
-  email?: string;
-}
+
 
 function Register() {
   let navigate = useNavigate();
@@ -40,6 +38,8 @@ function Register() {
             `${process.env.REACT_APP_API_URL}/api/users/signup`,
             values
           );
+          console.log(res)
+
           notify(res.data.message);
           if (context?.Dispatch) {
             console.log("dispatching")
@@ -52,9 +52,8 @@ function Register() {
               payload: res.data.data.userId,
             });
           }
-          let userID = context?.State ? context.State.userid : ""
-          console.log(userID)
-          navigate(`/verifyotp/${userID}`);
+          // let userID = context?.State ? context.State.userid : ""
+          navigate(`/verifyotp/${res.data.data.userId}`);
 
         } catch (error: any) {
           console.log(error)

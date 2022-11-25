@@ -5,12 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ContextAPI } from "../App";
 import { notify } from "./Toast/toast";
+import { error } from '../Types/types'
 
-interface error {
-  otp?: string;
-  userId?: string;
-  email?: string;
-}
 
 function VerifyOTP() {
   let context = useContext(ContextAPI);

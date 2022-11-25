@@ -3,9 +3,9 @@ import { useFormik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-interface error {
-  email?: string;
-}
+import { error } from '../Types/types'
+import { notify } from "./Toast/toast";
+
 
 function ForgetPassword() {
   let navigate = useNavigate();
@@ -24,14 +24,16 @@ function ForgetPassword() {
       // console.log(values)
       try {
         const res = await axios.post(
-          `${process.env.REACT_APP_API_URL}/api/users/verifyOtp`,
+          `${process.env.REACT_APP_API_URL}/api/users/forgotpassword`,
           values
         );
         navigate("/resetpassword");
         // console.log(res)
-        alert(res.data.message);
-      } catch (error) {
-        console.log(error);
+        notify(res.data.message);
+      } catch (error: any) {
+        // console.log(error);
+        notify(error.response.data.message);
+
       }
     },
   });
@@ -48,10 +50,12 @@ function ForgetPassword() {
                 <div className="form-group pb-3">
                   <input
                     type="text"
-                    name="emailid"
+                    name="email"
                     placeholder="Enter Email ID"
                     className="form-control"
                     value={formik.values.email}
+                    onChange={formik.handleChange}
+
                   />
                 </div>
 
