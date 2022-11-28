@@ -5,9 +5,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { ContextAPI } from "../App";
 import { notify } from "./Toast/toast";
-import { error } from '../Types/types'
+import { error } from '../Types/types';
+import * as yup from 'yup';
 
 
+
+
+const formValidationSchema = yup.object({
+  email : yup.string().min(5).required().email(),// matches(/^[A-Za-z]{3,}@[A-Za-z]{3,}[.]{1}[A-Za-z]{2,6}$/,"This email is invalid. Make sure it's written like example@email.com")
+  password : yup.string().min(5).required(),
+  confirmPassword : yup.string().min(5).required().oneOf([yup.ref('password'),null],'Password must match')
+})
 
 function Register() {
   let navigate = useNavigate();
@@ -18,19 +26,21 @@ function Register() {
       password: "",
       confirmPassword: "",
     },
-    validate: (values) => {
-      let errors: error = {};
-      if (!values.email) {
-        errors.email = "Please enter email";
-      }
-      if (!values.password) {
-        errors.password = "Please enter password";
-      }
-      if (!values.confirmPassword) {
-        errors.password = "Please enter confirm password";
-      }
-      return errors;
-    },
+    validationSchema: formValidationSchema,
+    
+    // (values) => {
+    //   let errors: error = {};
+    //   if (!values.email) {
+    //     errors.email = "Please enter email";
+    //   }
+    //   if (!values.password) {
+    //     errors.password = "Please enter password";
+    //   }
+    //   if (!values.confirmPassword) {
+    //     errors.password = "Please enter confirm password";
+    //   }
+    //   return errors;
+    // },
     onSubmit: async (values) => {
       if (values.password === values.confirmPassword) {
         try {
@@ -73,6 +83,10 @@ function Register() {
     },
   });
 
+  const styles ={
+    color: "red",
+  }
+
   return (
     <>
       <ToastContainer />
@@ -93,7 +107,8 @@ function Register() {
               <h3 className="pb-3">Register Form</h3>
               <div className="form-style">
                 <form onSubmit={formik.handleSubmit}>
-                  <div className="form-group pb-3">
+                  
+                  <div style={styles} className="form-group pb-3" >
                     <input
                       type="text"
                       placeholder="email"
@@ -103,19 +118,27 @@ function Register() {
                       name="email"
                       value={formik.values.email}
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
+                    {formik.touched.email && formik.errors.email?formik.errors.email:""}
                   </div>
-                  <div className="form-group pb-3">
+
+                  <div style={styles} className="form-group pb-3">
                     <input
                       type="password"
                       placeholder="Password"
                       className="form-control"
+                      id='password'
                       name="password"
                       value={formik.values.password}
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
+                    {formik.touched.password && formik.errors.password ? formik.errors.password : ""}
                   </div>
-                  <div className="form-group pb-3">
+
+
+                  <div style={styles} className="form-group pb-3">
                     <input
                       type="password"
                       placeholder="Confirm Password"
@@ -123,7 +146,9 @@ function Register() {
                       name="confirmPassword"
                       value={formik.values.confirmPassword}
                       onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                     />
+                    {formik.touched.confirmPassword && formik.errors.confirmPassword ? formik.errors.confirmPassword : ""}
                   </div>
 
                   <div className="pb-2">

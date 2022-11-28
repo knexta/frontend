@@ -7,6 +7,29 @@
   pointer-events: none;
 }
 
+.notFound{
+    display : flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items: center;
+    gap: 3em;
+    height: 100vh;
+    font-weight: bold; 
+}
+
+.notFound-btn{
+  color: white;
+  background: black;
+  font-weight: bold;
+}
+
+.notFound-btn:hover,
+.notFound-btn:focus{
+  color: black;
+  background: grey;
+  font-weight: bold;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

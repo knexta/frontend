@@ -10,6 +10,7 @@ import { Products } from "./Components/Products";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ForgetPassword from "./Components/ForgetPassword";
 import ResetPassword from "./Components/ResetPassword";
+import { NotFound } from "./Components/NotFound";
 
 interface stateParams {
   emailid: String;
@@ -50,6 +51,7 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/resetpassword" element={<ResetPassword />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </ContextAPI.Provider>
     </BrowserRouter>
